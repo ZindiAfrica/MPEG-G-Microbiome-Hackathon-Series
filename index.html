@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MPEG-G Microbiome Hackathon Series — winning solutions</title>
+<meta name="description" content="Winning machine learning solutions from the MPEG-G Microbiome Hackathon Series: two open competitions on Zindi on classifying microbiome samples and modelling host-microbiome interactions.">
+<link rel="icon" href="assets/img/zindi-navy.png">
+<meta property="og:title" content="MPEG-G Microbiome Hackathon Series — winning solutions">
+<meta property="og:description" content="Eight open-source machine learning solutions for decoding the human microbiome, from two competitions on Zindi.">
+<meta property="og:image" content="assets/img/banner-dialogue.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="brand" href="https://zindi.africa/"><img src="assets/img/zindi-white.png" alt="Zindi" width="480" height="118"></a>
+
+    <p class="hero__series">MPEG-G Microbiome Hackathon Series, 2025</p>
+    <h1>Your microbes and your immune system are having a conversation. Eight teams built tools to listen in.</h1>
+    <p class="hero__lede">Two open competitions on Zindi asked data scientists to apply machine learning to microbiome data held in MPEG-G, the ISO/IEC 23092 standard for genomic information. Every winning method on this page is open source.</p>
+
+    <ul class="hero__meta">
+      <li><b>1,200+</b> data scientists took part</li>
+      <li><b>2</b> challenges</li>
+      <li><b>8</b> winning solutions</li>
+    </ul>
+
+    <div class="hero__graph">
+      <svg viewBox="0 0 1000 300" role="img" aria-labelledby="graphTitle graphDesc">
+        <title id="graphTitle">Schematic of a bipartite network linking microbial taxa to immune cytokines</title>
+        <desc id="graphDesc">A schematic showing microbial taxa on the left connected by edges of varying weight to immune cytokines on the right, illustrating the structure of the problem the competitions posed.</desc>
+
+        <g class="g-edge" stroke-width="1.1" opacity="0.5">
+          <path d="M250 40 Q500 30 750 26"/>
+          <path d="M250 40 Q500 90 750 152"/>
+          <path d="M250 100 Q500 70 750 68"/>
+          <path d="M250 100 Q500 150 750 194"/>
+          <path d="M250 160 Q500 130 750 110"/>
+          <path d="M250 160 Q500 200 750 236"/>
+          <path d="M250 220 Q500 190 750 152"/>
+          <path d="M250 220 Q500 250 750 278"/>
+          <path d="M250 280 Q500 240 750 194"/>
+          <path d="M250 280 Q500 290 750 278"/>
+        </g>
+        <g class="g-edge g-edge--strong" stroke-width="2.4" opacity="0.95">
+          <path d="M250 40 Q500 45 750 68"/>
+          <path d="M250 100 Q500 100 750 110"/>
+          <path d="M250 160 Q500 60 750 26"/>
+          <path d="M250 220 Q500 180 750 152"/>
+          <path d="M250 280 Q500 200 750 110"/>
+        </g>
+
+        <g class="g-node">
+          <circle cx="250" cy="40" r="5.5"/>
+          <circle cx="250" cy="100" r="5.5"/>
+          <circle cx="250" cy="160" r="5.5"/>
+          <circle cx="250" cy="220" r="5.5"/>
+          <circle cx="250" cy="280" r="5.5"/>
+        </g>
+        <g class="g-label" text-anchor="end">
+          <text x="234" y="44">Faecalibacterium prausnitzii</text>
+          <text x="234" y="104">Eubacterium rectale</text>
+          <text x="234" y="164">Streptococcus</text>
+          <text x="234" y="224">Staphylococcus aureus</text>
+          <text x="234" y="284">Prevotella</text>
+        </g>
+
+        <g class="g-node--cyt">
+          <circle cx="750" cy="26" r="5.5"/>
+          <circle cx="750" cy="68" r="5.5"/>
+          <circle cx="750" cy="110" r="5.5"/>
+          <circle cx="750" cy="152" r="5.5"/>
+          <circle cx="750" cy="194" r="5.5"/>
+          <circle cx="750" cy="236" r="5.5"/>
+          <circle cx="750" cy="278" r="5.5"/>
+        </g>
+        <g class="g-label" text-anchor="start">
+          <text x="766" y="30">TNF-&#946;</text>
+          <text x="766" y="72">VCAM-1</text>
+          <text x="766" y="114">PAI-1</text>
+          <text x="766" y="156">IFN-&#946;</text>
+          <text x="766" y="198">IL-22</text>
+          <text x="766" y="240">Leptin</text>
+          <text x="766" y="282">EGF</text>
+        </g>
+
+        <g class="g-axis">
+          <text x="234" y="14" text-anchor="end">Microbial taxa</text>
+          <text x="766" y="14" text-anchor="start">Immune cytokines</text>
+        </g>
+      </svg>
+      <p class="hero__caption">A schematic of the problem, not a result. Some cytokines turned out to be predictable from microbial sequence alone and others, such as EGF and IL-22, did not. Working out which is which was one of the outcomes.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ the series ============ -->
+<section class="band" id="challenges">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Two challenges, one dataset</h2>
+      <p>Both competitions drew on a longitudinal multi-omic study by Zhou et al. (<i>Cell Host &amp; Microbe</i>, 2024), which tracked microbiome composition, immune cytokines and clinical markers across four body sites in 86 participants over six years. This was the first time the dataset was released in MPEG-G format for open machine learning research.</p>
+    </div>
+
+    <figure class="fig">
+      <img src="assets/img/study-design.jpg" alt="Study design: 86 participants sampled every three months for blood, stool, skin, oral and nasal samples, with proteomics, metabolomics, lipidomics, cytokine and lab test panels; a UMAP projection separates the four body sites into distinct clusters." width="1800" height="1087" loading="lazy">
+      <figcaption><b>The underlying study.</b> Blood and four body-site swabs collected on a three-month cycle, feeding proteomic, metabolomic, lipidomic, cytokine and clinical panels. The projection at lower left shows how cleanly the four body sites separate, which is what made Challenge 1 tractable. Figure from Zhou et al., <i>Cell Host &amp; Microbe</i>, 2024.</figcaption>
+    </figure>
+
+    <div class="challenges">
+      <article class="challenge">
+        <a class="challenge__banner" href="https://zindi.africa/competitions/mpeg-g-microbiome-classification-challenge"><img src="assets/img/banner-classification.jpg" alt="MPEG-G Microbiome Classification Challenge" width="900" height="900" loading="lazy"></a>
+        <span class="challenge__no">Challenge 1, 20 June to 15 September 2025</span>
+        <h3>Microbiome Classification</h3>
+        <p class="challenge__q">Can you tell where on the body a microbiome sample came from, using only its sequence profile?</p>
+        <p>Participants classified samples as stool, oral, skin or nasal from 16S rRNA profiles encoded in MPEG-G. Every team had to submit two models: one centralised, one trained by federated learning, where the model moves between data silos and the raw data never does. In clinical genomics, patient data frequently cannot cross a hospital or a border, so the question of whether federated models can match pooled ones is a practical one.</p>
+        <ul class="stats">
+          <li><b>763</b><span>participants engaged</span></li>
+          <li><b>87</b><span>countries</span></li>
+          <li><b>2,369</b><span>submissions</span></li>
+          <li><b>13%</b><span>women</span></li>
+        </ul>
+        <p><a href="https://zindi.africa/competitions/mpeg-g-microbiome-classification-challenge">Challenge page on Zindi</a></p>
+      </article>
+
+      <article class="challenge">
+        <a class="challenge__banner" href="https://zindi.africa/competitions/mpeg-g-decoding-the-dialogue"><img src="assets/img/banner-dialogue.jpg" alt="MPEG-G: Decoding the Dialogue Challenge" width="900" height="900" loading="lazy"></a>
+        <span class="challenge__no">Challenge 2, 27 June to 2 November 2025</span>
+        <h3>Decoding the Dialogue</h3>
+        <p class="challenge__q">Can you model the interaction between microbial communities and the immune system?</p>
+        <p>An open-ended research challenge across five independent tracks, asking participants to go beyond the Bayesian statistical analysis in the original study. Submissions were judged on scientific contribution rather than a leaderboard metric, which is unusual for Zindi and shows in the lower entry numbers.</p>
+        <ul class="stats">
+          <li><b>479</b><span>participants engaged</span></li>
+          <li><b>77</b><span>countries</span></li>
+          <li><b>153</b><span>submissions</span></li>
+          <li><b>14%</b><span>women</span></li>
+        </ul>
+        <p><a href="https://zindi.africa/competitions/mpeg-g-decoding-the-dialogue">Challenge page on Zindi</a></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ challenge 1 winners ============ -->
+<section class="band band--sunken" id="classification">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Challenge 1: the winning classifiers</h2>
+      <p>All three top solutions misclassified between three and four of 1,068 held-out samples, and their federated variants stayed close to their centralised ones. Federated learning is often assumed to cost accuracy. Here it did not cost much.</p>
+    </div>
+
+    <div class="winners">
+
+      <article class="winner">
+        <div class="winner__place">First place<span>Team Tiny Margins, Big Margins: Julius Mwangi (Juliuss), Kenya</span></div>
+        <div class="winner__body">
+          <h3>Cyclic federated LightGBM</h3>
+          <p>Partitioned the data by phenotype into four clients (control, crossover, diabetic, prediabetic) and passed a single LightGBM model around the ring, training locally at each stop before handing it on. One full circuit is one global round. No gradient averaging, no central aggregator.</p>
+          <ul class="pair">
+            <li>
+              <h4>Centralised</h4>
+              <p>LightGBM multiclass on pre-extracted numeric profile and metadata features, hyperparameters tuned with Optuna, 10-fold stratified cross-validation, one pooled model across all phenotypes and sites.</p>
+            </li>
+            <li>
+              <h4>Federated</h4>
+              <p>The same LightGBM configuration per client, a fixed number of boosting rounds locally, then the updated model is passed to the next client. A global label encoder kept the target mapping consistent across silos.</p>
+            </li>
+          </ul>
+          <p class="repo"><a href="https://github.com/JuliusFx131/cyclic-federated-learning">Source: JuliusFx131/cyclic-federated-learning</a></p>
+        </div>
+      </article>
+
+      <article class="winner">
+        <div class="winner__place">Second place<span>Team Kmers: Stephen Kolesh (Kenya) and Ronny Polle (Ghana)</span></div>
+        <div class="winner__body">
+          <h3>Federated XGBoost over k-mer features</h3>
+          <p>The strongest feature engineering of the three. Read counts, GC content, nucleotide fractions, Q20 and Q30 quality metrics, and k-mer frequencies for k of 2 to 5, built against canonical vocabularies fitted on the training set only. Splits were made with stratified group k-fold on subject ID, so no participant appeared on both sides of a fold.</p>
+          <ul class="pair">
+            <li>
+              <h4>Centralised</h4>
+              <p>XGBoost on the merged feature and metadata table, evaluated by multiclass log loss under stratified k-fold, with learning rate, tree depth and regularisation tuned for generalisation.</p>
+            </li>
+            <li>
+              <h4>Federated</h4>
+              <p>A Flower pipeline in which each client ran 500 boosting rounds with a bagging strategy and sent trees to the server, aggregated into a global model by a custom strategy that persisted the model after every round.</p>
+            </li>
+          </ul>
+          <p class="repo"><a href="https://github.com/koleshjr/MPEG-G-Microbiome-Classification-Challenge">Source: koleshjr/MPEG-G-Microbiome-Classification-Challenge</a></p>
+        </div>
+      </article>
+
+      <article class="winner">
+        <div class="winner__place">Third place<span>Team Ever Learners: Duke Kongo (Ghana) and Nyashadzaishe Masvongo (Zimbabwe)</span></div>
+        <div class="winner__body">
+          <h3>Stacked XGBoost and neural meta-learner</h3>
+          <p>A two-stage stack. XGBoost generates out-of-fold class probabilities, and a multilayer perceptron is trained only on those probabilities rather than on the original features, which keeps the meta-learner small and makes the federated version cheap to communicate.</p>
+          <ul class="pair">
+            <li>
+              <h4>Centralised</h4>
+              <p>Stage one is a 5-fold XGBoost producing out-of-fold predictions and averaged test predictions. Stage two is an MLP of 1024, 512 and 256 units with batch normalisation, dropout at 0.2 and ReLU, trained with Adam and early stopping.</p>
+            </li>
+            <li>
+              <h4>Federated</h4>
+              <p>Clients grouped by hashed subject ID train XGBoost locally, then train MLP meta-learners on their own out-of-fold outputs. Weights are combined on the server by federated averaging into one global meta-learner.</p>
+            </li>
+          </ul>
+          <p class="repo"><a href="https://github.com/codejoetheduke/3rd-place-solution-mpeg-g-classification">Source: codejoetheduke/3rd-place-solution-mpeg-g-classification</a></p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ challenge 2 tracks ============ -->
+<section class="band" id="dialogue">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Challenge 2: five tracks, five findings</h2>
+      <p>Each track attacked a different face of the host-microbiome relationship. The code for all five sits in this repository under <code>solutions/challenge-2/</code>.</p>
+    </div>
+
+    <figure class="fig fig--wide">
+      <img src="assets/img/taxa-cytokine-network.jpg" alt="A bipartite network with microbial genera from stool, skin, oral and nasal sites on the outside and cytokines down the centre, alongside phylum composition bars, correlation coefficient distributions and a clustered correlation heatmap." width="1800" height="1793" loading="lazy">
+      <figcaption><b>The starting point.</b> The original study's correlation map between microbial genera and cytokines, by body site. Correlations are numerous but individually weak, and this is what the competition asked participants to improve on. Tracks 2 and 3 both took this structure as their target: one testing which of these links survive resampling, the other rebuilding the network with graph neural networks. Figure from Zhou et al., <i>Cell Host &amp; Microbe</i>, 2024.</figcaption>
+    </figure>
+
+    <div class="tracks">
+
+      <article class="track">
+        <div class="track__index">Track 1<span>Fares Mallouli, Tunisia</span></div>
+        <div class="track__body">
+          <h3>Predicting immune response from sequence</h3>
+          <p>A k-mer counting, TF-IDF and LightGBM pipeline inside 5-fold cross-validation, predicting circulating cytokine levels from the microbial sequences found on a person's body.</p>
+          <div class="finding">
+            <p>The useful result was the failures. VCAM-1, PAI-1 and TNF-α were predicted well; EGF, IL-22, leptin and BDNF were not. That split the panel into microbiome-predictable and microbiome-independent cytokines, which tells later work where to look and where not to.</p>
+          </div>
+          <p class="repo"><a href="solutions/challenge-2/track-1-cytokine-prediction/">Solution files</a></p>
+        </div>
+      </article>
+
+      <article class="track">
+        <div class="track__index">Track 2<span>Chigozie Nkwocha, Nigeria</span></div>
+        <div class="track__body">
+          <h3>Which associations can be trusted</h3>
+          <p>Rather than asking which microbe correlates with which cytokine, this entry asked which of those correlations survive resampling. A thousand bootstrap resamples with ridge regression produced confidence intervals, directional stability scores and coefficient-of-variation metrics for every k-mer and cytokine pair.</p>
+          <div class="finding">
+            <p>Resistin, IL-2, IFN-β and ICAM-1 held the most stable associations with microbial sequence. IL-27 and MIG were markedly less stable, suggesting their microbiome relationships are context dependent. Reliability mapping of this kind is a precondition for treating any microbiome association as a candidate biomarker.</p>
+          </div>
+          <p class="repo"><a href="solutions/challenge-2/track-2-association-stability/">Solution files</a></p>
+        </div>
+      </article>
+
+      <article class="track">
+        <div class="track__index">Track 3<span>Abdourahamane Idé Salifou, Niger, Carnegie Mellon University Africa</span></div>
+        <div class="track__body">
+          <h3>Interaction networks with graph neural networks</h3>
+          <p>Bipartite graphs with taxa and cytokines as nodes and random forest feature importance as edges, encoded per body site by variational graph autoencoders, then run through pathway enrichment analysis.</p>
+          <p>Each site returned a distinct biological signature, discovered from the data rather than read from the literature:</p>
+          <ul class="sites">
+            <li class="stool"><b>Stool</b><em>Metabolic pathways: butanoate metabolism, lipid processing</em></li>
+            <li class="oral"><b>Oral</b><em>Inflammatory signalling: JAK-STAT, NF-κB, IL-17</em></li>
+            <li class="nasal"><b>Nasal</b><em>Antiviral defence: type I interferon, RIG-I-like receptors</em></li>
+            <li class="skin"><b>Skin</b><em>Tissue maintenance and growth factor activity</em></li>
+          </ul>
+          <p class="repo"><a href="solutions/challenge-2/track-3-interaction-networks/">Solution files</a></p>
+        </div>
+      </article>
+
+      <article class="track">
+        <div class="track__index">Track 4<span>Team Ever Learners: Nyashadzaishe Masvongo and Duke Kongo</span></div>
+        <div class="track__body">
+          <h3>Latent health states</h3>
+          <p>A variational autoencoder compressed 4,460 features, 66 cytokines and 4,394 bacterial taxa, into 64 dimensions, and the embeddings were then clustered. Eight states emerged:</p>
+          <ol class="phenotypes">
+            <li><b>Acute inflammation.</b> Extreme TNF-β with pathogenic <i>Streptococcus</i>, consistent with an active clinical event.</li>
+            <li><b>Staphylococcal infection.</b> <i>S. aureus</i> enrichment with a neutrophil chemokine signature.</li>
+            <li><b>Metabolic inflammation.</b> Raised leptin and GM-CSF, matching obesity-associated patterns.</li>
+            <li><b>Metabolic dysbiosis.</b> Hepatocyte growth factor elevation with dysbiotic communities.</li>
+            <li><b>Healthy gut.</b> <i>Faecalibacterium prausnitzii</i> and <i>Eubacterium rectale</i>, the butyrate-producing protective profile.</li>
+            <li><b>Baseline healthy.</b> Low cytokines, low pathogen abundance, and the largest cluster at 54% of samples.</li>
+            <li><b>Immune modulated.</b> A pattern suggesting immunosuppression.</li>
+            <li><b>Chronic or exhausted.</b> A pattern suggesting sustained immune fatigue.</li>
+          </ol>
+          <div class="finding">
+            <p>The method depended on normalising cytokine and microbiome features separately before fusing them. Without that step the far more numerous microbiome features swamped the cytokine signal and everything collapsed into one uninformative cluster.</p>
+          </div>
+          <p class="repo"><a href="solutions/challenge-2/track-4-health-states/">Solution files</a></p>
+        </div>
+      </article>
+
+      <article class="track">
+        <div class="track__index">Track 5<span>Team Ever Learners: Nyashadzaishe Masvongo and Duke Kongo</span></div>
+        <div class="track__body">
+          <h3>PyGenie, and a multimodal classifier</h3>
+          <p>Two contributions. PyGenie is an open-source Python wrapper for the Genie MPEG-G decoder that streams straight from compressed format to model-ready features with no intermediate files, reported at five to ten times faster than conventional pipelines. Benchmarked over 2,901 microbiome files, the full pipeline finished in under two hours.</p>
+          <p>The second is a multimodal network that renders k-mer frequency distributions as images, encodes them with an EVA02-Large vision transformer, and fuses those features with taxa abundance and cytokine metadata.</p>
+          <div class="finding">
+            <p>88.4% accuracy on health status (healthy, insulin resistant, type 2 diabetes) and 99.5% on sample type, with the circular dependency between the two targets deliberately broken rather than left to inflate the numbers.</p>
+          </div>
+          <p class="repo"><a href="solutions/challenge-2/track-5-pygenie-multimodal/">Solution files</a></p>
+        </div>
+      </article>
+
+    </div>
+
+    <figure class="fig fig--wide">
+      <img src="assets/img/mediation-analysis.jpg" alt="Sankey diagrams tracing microbiome body sites through proteome, metabolome, lipidome and cytokine mediators to clinical phenotypes, split by insulin sensitive and insulin resistant participants, with example mediation triangles." width="1800" height="871" loading="lazy">
+      <figcaption><b>What the tracks were asked to beat.</b> The original mediation analysis, tracing microbiome signals through molecular mediators to clinical phenotypes, and splitting the picture between insulin-sensitive and insulin-resistant participants. Figure from Zhou et al., <i>Cell Host &amp; Microbe</i>, 2024.</figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ============ outcomes ============ -->
+<section class="band band--sunken" id="outcomes">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>What came out of it</h2>
+    </div>
+    <div class="outcomes">
+      <div>
+        <h3>For microbiome science</h3>
+        <p>Graph neural networks, variational autoencoders, multimodal transformers and federated learning pulled more out of this dataset than classical statistics alone. Body-site pathway signatures, latent health states, a stratified cytokine panel and a reliability map of associations are all usable results rather than demonstrations.</p>
+      </div>
+      <div>
+        <h3>For genomic data standards</h3>
+        <p>MPEG-G (ISO/IEC 23092) was built for compression and transport, and uptake in the machine learning community has been slow. These solutions worked directly against MPEG-G-encoded data, and PyGenie shows the decode step need not be a bottleneck.</p>
+      </div>
+      <div>
+        <h3>For open science</h3>
+        <p>Winners came from Kenya, Ghana, Zimbabwe, Nigeria, Niger and Tunisia, working alongside contributors at Stanford, Carnegie Mellon University Africa and European institutions. The code is open source, the data are CC-BY, and the results are reproducible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ partners ============ -->
+<section class="band" id="partners">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Who ran it</h2>
+      <p>The series was organised by a consortium of research and industry partners, with Zindi as challenge manager.</p>
+    </div>
+    <ul class="partners">
+      <li>Royal Philips<span>Patrick Cheung, Ray Krasinski</span></li>
+      <li>Stanford Medicine</li>
+      <li>CIMA University of Navarra<span>Mikel Hernaez</span></li>
+      <li>Leibniz University Hannover<span>Jan Voges</span></li>
+      <li>Fudan University<span>Xin Zhou</span></li>
+      <li>Intelligent Medicine Institute<span>Fudan University</span></li>
+      <li>Viome<span>Lan Hu, Eric Patridge</span></li>
+      <li>Zindi<span>Challenge design and operations</span></li>
+    </ul>
+    <div class="gap">
+      <p><strong>To confirm before publishing:</strong> Nevenka Dimitrova is listed as an organiser in the write-up with an MSKCC affiliation, which is not in the partner list above. Add the institution or move the credit. Remove this box once resolved.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="cite">
+  <div class="wrap">
+    <h2>Reuse and citation</h2>
+    <p>Solution code is released by its authors under the licences in each repository or solution folder. The underlying dataset and the figures reproduced on this page are from Zhou et al., <i>Cell Host &amp; Microbe</i>, 2024, released CC-BY.</p>
+    <p>Results from the series are being prepared for peer-reviewed publication, with each winning team extending its solution into a full article.</p>
+    <p>If you would like to take part in a future edition as a competitor, sponsor or collaborator, get in touch through <a href="https://zindi.africa/">Zindi</a>.</p>
+    <a class="foot__logo" href="https://zindi.africa/"><img src="assets/img/zindi-white.png" alt="Zindi" width="480" height="118"></a>
+  </div>
+</footer>
+
+</body>
+</html>
